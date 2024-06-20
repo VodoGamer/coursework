@@ -4,10 +4,10 @@
 
 #include "list_object.cpp"
 
-void print_file(string);
+void print_file(const std::string &);
 void print_main_menu(List *);
 void print_menu_options(List *);
-void create_new_list(List *);
+void create_new_list(List *&);
 
 int main()
 {
@@ -17,33 +17,37 @@ int main()
   return 0;
 }
 
-void print_file(string file_name)
+void print_file(const std::string &file_name)
 {
-  std::ifstream file;
-  file.open(file_name);
-  string text;
+  std::ifstream file(file_name);
+  std::string text;
   if (file.is_open())
   {
-    while (getline(file, text))
+    while (std::getline(file, text))
     {
       std::cout << text << std::endl;
     }
+    file.close();
   }
-  file.close();
+  else
+  {
+    std::cerr << "Unable to open file: " << file_name << std::endl;
+  }
 }
 
-void create_new_list(List *lists)
+void create_new_list(List *&lists)
 {
-  std::cout << "Создание нового списка" << endl;
+  std::cout << "Создание нового списка" << std::endl;
   List *list = new List();
-  string choice;
-  while (choice != "x")
+  std::string choice;
+  while (true)
   {
     std::cout << "Введите новый элемент списка (x для выхода): ";
     std::cin >> choice;
-    if (choice != "x")
-      list->append(std::stoi(choice));
-  };
+    if (choice == "x")
+      break;
+    list->append(std::stoi(choice));
+  }
   lists = list;
   system("clear");
   print_main_menu(lists);
@@ -69,7 +73,8 @@ void print_main_menu(List *lists)
     break;
   case 3:
     system("clear");
-    lists->print();
+    if (lists != nullptr)
+      lists->print();
     print_main_menu(lists);
     break;
   default:
@@ -81,13 +86,13 @@ void print_menu_options(List *lists)
 {
   if (lists == nullptr)
   {
-    std::cout << "У вас нет списков на данный момент" << endl;
+    std::cout << "У вас нет списков на данный момент" << std::endl;
   }
-  std::cout << "[1] Создать новый список" << endl;
+  std::cout << "[1] Создать новый список" << std::endl;
   if (lists != nullptr)
   {
-    std::cout << "[2] Удалить список" << endl;
-    std::cout << "[3] Вывести список" << endl;
+    std::cout << "[2] Удалить список" << std::endl;
+    std::cout << "[3] Вывести список" << std::endl;
   }
-  std::cout << "[0] Выход" << endl;
+  std::cout << "[0] Выход" << std::endl;
 }
