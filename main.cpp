@@ -10,6 +10,7 @@ void print_menu_options(List *[100]);
 void create_new_list(List *[100]);
 void delete_list(List *[100]);
 void print_list(List *[100]);
+void delete_all_lists(List *[100]);
 
 int main() {
   List *lists[100] = {nullptr};
@@ -85,6 +86,7 @@ void print_list(List *lists[100]) {
     std::cerr << "Неверный номер списка или список не существует." << std::endl;
     print_main_menu(lists);
   }
+  system("clear");
   lists[index]->print();
   print_main_menu(lists);
 }
@@ -105,6 +107,9 @@ void print_main_menu(List *lists[100]) {
     case 3:
       print_list(lists);
       break;
+    case 0:
+      delete_all_lists(lists);
+      break;
     default:
       break;
   }
@@ -124,4 +129,14 @@ void print_menu_options(List *lists[100]) {
     std::cout << "[3] Вывести список" << std::endl;
   }
   std::cout << "[0] Выход" << std::endl;
+}
+
+void delete_all_lists(List *lists[100]) {
+  for (int i = 0; i < 100; ++i) {
+    if (lists[i] != nullptr) {
+      delete lists[i];
+      lists[i] = nullptr;
+    }
+  }
+  lists = nullptr;
 }
